@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <title>Repair Management System - Список радиостанций в ремонте</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<header>
+    <h1>Учет ремонта радиостанций</h1>
+    <nav>
+        <a th:href="@{/repairs}">Ремонт</a>
+        <!-- Доступ к остальным разделам только для ролей ADMIN и USER -->
+        <span sec:authorize="hasAnyRole('ADMIN', 'USER')">
+            | <a th:href="@{/radio-types}">Типы радиостанций</a>
+            | <a th:href="@{/departments}">Подразделения</a>
+            | <a th:href="@{/spare-parts}">Запчасти</a>
+        </span>
+        <span sec:authorize="hasRole('ADMIN')">
+            | <a th:href="@{/workers}">Работники</a>
+            | <a th:href="@{/statuses}">Статусы</a>
+        </span>
+    </nav>
+</header>
+
+<main>
+    <h2>Список радиостанций в ремонте</h2>
+
+    <!-- Поисковая строка с выпадающим списком фильтров -->
+    <form th:action="@{/repairs}" method="get">
+        <input type="text" name="query" placeholder="Введите поисковый запрос" th:value="${query}"/>
+        <button type="submit">Поиск</button>
+        <a th:href="@{/repairs}"><button type="button">Отмена</button></a><br>
+        <br>Фильтр поиска:
+        <select name="filter">
+            <option value="all" th:selected="${filter == 'all'}">Всё</option>
+            <option value="inventoryNumber" th:selected="${filter == 'inventoryNumber'}">Инв. номер</option>
+            <option value="factoryNumber" th:selected="${filter == 'factoryNumber'}">Завод. номер</option>
+            <option value="radioType" th:selected="${filter == 'radioType'}">Тип радиостанции</option>
+            <option value="department" th:selected="${filter == 'department'}">Подразделение</option>
+            <option value="worker" th:selected="${filter == 'worker'}">Работник</option>
+            <option value="sparePart" th:selected="${filter == 'sparePart'}">Запчасть</option>
+            <option value="status" th:selected="${filter == 'status'}">Статус</option>
+            <option value="pageNumber" th:selected="${filter == 'pageNumber'}">№ Страницы</option>
+        </select>
+    </form> <br>
+
+    <!-- Таблица с данными -->
+    <table>
+        <thead>
+        <tr>
+            <th><a th:href="@{/repairs(sort='id', direction=${direction == 'asc' ? 'desc' : 'asc'})}">ID</a></th>
+            <th><a th:href="@{/repairs(sort='inventoryNumber', direction=${direction == 'asc' ? 'desc' : 'asc'})}">Инв. номер</a></th>
+            <th><a th:href="@{/repairs(sort='factoryNumber', direction=${direction == 'asc' ? 'desc' : 'asc'})}">Завод. номер</a></th>
+            <th><a th:href="@{/repairs(sort='radioType.typeName', direction=${direction == 'asc' ? 'desc' : 'asc'})}">Тип радиостанции</a></th>
+            <th><a th:href="@{/repairs(sort='department.departmentName', direction=${direction == 'asc' ? 'desc' : 'asc'})}">Подразделение</a></th>
+            <th><a th:href="@{/repairs(sort='worker.lastName', direction=${direction == 'asc' ? 'desc' : 'asc'})}">Работник</a></th>
+            <th><a th:href="@{/repairs(sort='sparePart.partName', direction=${direction == 'asc' ? 'desc' : 'asc'})}">Запчасть</a></th>
+            <th><a th:href="@{/repairs(sort='status.rstatus', direction=${direction == 'asc' ? 'desc' : 'asc'})}">Статус</a></th>
+            <th><a th:href="@{/repairs(sort='statusTimestamp', direction=${direction == 'asc' ? 'desc' : 'asc'})}">Время статуса</a></th>
+            <!-- Действия доступны только для ролей ADMIN и USER -->
+            <th sec:authorize="hasAnyRole('ADMIN', 'USER')">Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="repair : ${repairs}">
+            <td th:text="${repair.id}"></td>
+            <td th:text="${repair.inventoryNumber}"></td>
+            <td th:text="${repair.factoryNumber}"></td>
+            <td th:text="${repair.radioType.typeName}"></td>
+            <td th:text="${repair.department.departmentName}"></td>
+            <td th:text="${repair.worker.lastName}"></td>
+            <td th:text="${repair.sparePart.partName}"></td>
+            <td th:text="${repair.status.rstatus}"></td>
+            <td th:text="${repair.formattedStatusTimestamp}"></td>
+            <!-- Ссылки на редактирование и удаление отображаются только для ADMIN и USER -->
+            <td sec:authorize="hasAnyRole('ADMIN', 'USER')">
+                <a th:href="@{/repairs/edit/{id}(id=${repair.id})}">Редактировать</a> |
+                <a th:href="@{/repairs/delete/{id}(id=${repair.id})}">Удалить</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- Кнопка добавления доступна только для ADMIN и USER -->
+    <a th:href="@{/repairs/new}" sec:authorize="hasAnyRole('ADMIN', 'USER')">Добавить новую радиостанцию</a>
+    <br>
+
+    <!-- Пагинация -->
+    <div class="pagination">
+        <span th:if="${currentPage > 0}">
+            <a th:href="@{/repairs(page=${currentPage - 1}, sort=${sort}, direction=${direction}, size=${size})}">Предыдущая</a>
+        </span>
+        <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+            <a th:href="@{/repairs(page=${i}, sort=${sort}, direction=${direction}, size=${size})}"
+               th:text="${i + 1}" th:classappend="${i == currentPage} ? 'active' : ''"></a>
+        </span>
+        <span th:if="${currentPage < totalPages - 1}">
+            <a th:href="@{/repairs(page=${currentPage + 1}, sort=${sort}, direction=${direction}, size=${size})}">Следующая</a>
+        </span>
+    </div>
+
+
+    <!-- Блок с информацией о пользователе и кнопкой выхода -->
+    <div style="text-align: right; margin-top: -40px;">
+        <p>
+            Пользователь: <span th:text="${currentUser != null ? currentUser.lastName : ''}"></span><br>
+            Доступ: <span th:text="${currentUser != null ? currentUser.role : ''}"></span>
+        </p>
+        <form th:action="@{/logout}" method="post" style="display: inline;">
+            <button type="submit">Выйти</button>
+        </form>
+    </div>
+
+</main>
+
+<footer>
+    <p>&copy; 2024 Repair Management System</p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавить тип радиостанции</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<!-- Заголовок и навигация -->
+<header>
+    <h1>Учет ремонта радиостанций</h1>
+    <nav>
+        <a th:href="@{/repairs}"> Ремонт</a> |
+        <a th:href="@{/radio-types}"> Типы радиостанций</a> |
+        <a th:href="@{/departments}"> Подразделения</a> |
+        <a th:href="@{/spare-parts}"> Запчасти</a> |
+        <a th:href="@{/workers}"> Работники</a> |
+        <a th:href="@{/statuses}"> Статусы</a>
+    </nav>
+</header>
+
+<!-- Основное содержимое -->
+<main>
+    <h2>Добавить новый тип радиостанции</h2>
+
+    <!-- Форма для добавления нового типа радиостанции -->
+    <form th:action="@{/radio-types}" th:object="${radioType}" method="post">
+        <div>
+            <label for="typeName">Тип радиостанции:</label>
+            <input type="text" id="typeName" th:field="*{typeName}" required />
+        </div>
+
+        <div>
+            <label for="description">Описание:</label>
+            <input type="text" id="description" th:field="*{description}" required />
+        </div>
+
+        <div>
+            <button type="submit">Сохранить</button>
+            <a th:href="@{/radio-types}">Отмена</a>
+        </div>
+    </form>
+</main>
+
+<!-- Подвал -->
+<footer>
+    <p>&copy; 2024 Repair Management System</p>
+</footer>
+</body>
+</html>

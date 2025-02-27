@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <title>Список подразделений</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<!-- Заголовок и навигация -->
+<header>
+    <h1>Учет ремонта радиостанций</h1>
+    <nav>
+        <a th:href="@{/repairs}"> Ремонт</a>
+        <span sec:authorize="hasAnyRole('ADMIN', 'USER')">
+            | <a th:href="@{/radio-types}">Типы радиостанций</a>
+            | <a th:href="@{/departments}">Подразделения</a>
+            | <a th:href="@{/spare-parts}">Запчасти</a>
+        </span>
+        <span sec:authorize="hasRole('ADMIN')">
+            | <a th:href="@{/workers}">Работники</a>
+            | <a th:href="@{/statuses}">Статусы</a>
+        </span>
+    </nav>
+</header>
+
+<!-- Основное содержимое -->
+<main>
+    <h2>Список подразделений</h2>
+
+    <!-- Таблица отображения всех подразделений -->
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Наименование подразделения</th>
+            <th>Адрес</th>
+            <th sec:authorize="hasAnyRole('ADMIN', 'USER')">Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="department : ${departments}">
+            <td th:text="${department.id}"></td>
+            <td th:text="${department.departmentName}"></td>
+            <td th:text="${department.address}"></td>
+            <td sec:authorize="hasAnyRole('ADMIN', 'USER')">
+                <a th:href="@{/departments/edit/{id}(id=${department.id})}">Редактировать</a> |
+                <a th:href="@{/departments/delete/{id}(id=${department.id})}">Удалить</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- Ссылка для добавления доступна только ADMIN и USER -->
+    <a th:href="@{/departments/new}" sec:authorize="hasAnyRole('ADMIN', 'USER')">Добавить новое подразделение</a>
+</main>
+
+<footer>
+    <p>&copy; 2024 Repair Management System</p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактировать подразделение</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<!-- Заголовок и навигация -->
+<header>
+    <h1>Учет ремонта радиостанций</h1>
+    <nav>
+        <a th:href="@{/repairs}"> Ремонт</a> |
+        <a th:href="@{/radio-types}"> Типы радиостанций</a> |
+        <a th:href="@{/departments}"> Подразделения</a> |
+        <a th:href="@{/spare-parts}"> Запчасти</a> |
+        <a th:href="@{/workers}"> Работники</a> |
+        <a th:href="@{/statuses}"> Статусы</a>
+    </nav>
+</header>
+
+<!-- Основное содержимое -->
+<main>
+    <h2>Редактировать подразделение</h2>
+
+    <!-- Форма для редактирования подразделения -->
+    <form th:action="@{/departments/{id}(id=${department.id})}" th:object="${department}" method="post">
+        <div>
+            <label for="departmentName">Наименование подразделения:</label>
+            <input type="text" id="departmentName" th:field="*{departmentName}" required />
+        </div>
+
+        <div>
+            <label for="address">Адрес:</label>
+            <input type="text" id="address" th:field="*{address}" required />
+        </div>
+
+        <div>
+            <button type="submit">Сохранить</button>
+            <a th:href="@{/departments}">Отмена</a>
+        </div>
+    </form>
+</main>
+
+<!-- Подвал -->
+<footer>
+    <p>&copy; 2024 Repair Management System</p>
+</footer>
+</body>
+</html>

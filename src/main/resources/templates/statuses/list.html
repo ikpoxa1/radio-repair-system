@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Список статусов</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<header>
+    <h1>Учет ремонта радиостанций</h1>
+    <nav>
+        <a th:href="@{/repairs}"> Ремонт</a> |
+        <a th:href="@{/radio-types}"> Типы радиостанций</a> |
+        <a th:href="@{/departments}"> Подразделения</a> |
+        <a th:href="@{/spare-parts}"> Запчасти</a> |
+        <a th:href="@{/workers}"> Работники</a> |
+        <a th:href="@{/statuses}"> Статусы</a>
+    </nav>
+</header>
+
+<main>
+    <h2>Список статусов</h2>
+
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Статус</th>
+            <th>Описание</th>
+            <th>Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="status : ${statuses}">
+            <td th:text="${status.id}"></td>
+            <td th:text="${status.rstatus}"></td>
+            <td th:text="${status.rstatcomment}"></td>
+            <td>
+                <a th:href="@{/statuses/edit/{id}(id=${status.id})}">Редактировать</a> |
+                <a th:href="@{/statuses/delete/{id}(id=${status.id})}">Удалить</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a th:href="@{/statuses/new}">Добавить новый статус</a>
+</main>
+
+<footer>
+    <p>&copy; 2024 Repair Management System</p>
+</footer>
+</body>
+</html>

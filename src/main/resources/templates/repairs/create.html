@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавить радиостанцию в ремонт</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<header>
+    <h1>Учет ремонта радиостанций</h1>
+    <nav>
+        <a th:href="@{/repairs}"> Ремонт</a> |
+        <a th:href="@{/radio-types}"> Типы радиостанций</a> |
+        <a th:href="@{/departments}"> Подразделения</a> |
+        <a th:href="@{/spare-parts}"> Запчасти</a> |
+        <a th:href="@{/workers}"> Работники</a> |
+        <a th:href="@{/statuses}"> Статусы</a>
+    </nav>
+</header>
+
+<main>
+    <h2>Добавить новую радиостанцию в ремонт</h2>
+
+    <form th:action="@{/repairs}" th:object="${repair}" method="post">
+        <div>
+            <label for="inventoryNumber">Инвентарный номер:</label>
+            <input type="text" id="inventoryNumber" th:field="*{inventoryNumber}" required />
+        </div>
+
+        <div>
+            <label for="factoryNumber">Заводской номер:</label>
+            <input type="text" id="factoryNumber" th:field="*{factoryNumber}" required />
+        </div>
+
+        <div>
+            <label for="radioType">Тип радиостанции:</label>
+            <select id="radioType" th:field="*{radioType}" required>
+                <option th:each="type : ${radioTypes}" th:value="${type.id}" th:text="${type.typeName}"></option>
+            </select>
+        </div>
+
+        <div>
+            <label for="department">Подразделение:</label>
+            <select id="department" th:field="*{department}" required>
+                <option th:each="dept : ${departments}" th:value="${dept.id}" th:text="${dept.departmentName}"></option>
+            </select>
+        </div>
+
+        <div>
+            <label for="worker">Работник:</label>
+            <select id="worker" th:field="*{worker}" required>
+                <option th:each="worker : ${workers}" th:value="${worker.id}" th:text="${worker.lastName}"></option>
+            </select>
+        </div>
+
+        <div>
+            <label for="sparePart">Запчасть:</label>
+            <select id="sparePart" th:field="*{sparePart}" required>
+                <option th:each="part : ${spareParts}" th:value="${part.id}" th:text="${part.partName}"></option>
+            </select>
+        </div>
+
+        <div>
+            <label for="status">Статус:</label>
+            <select id="status" th:field="*{status}" required>
+                <option th:each="status : ${statuses}" th:value="${status.id}" th:text="${status.rstatus}"></option>
+            </select>
+        </div>
+
+        <div>
+            <button type="submit">Сохранить</button>
+            <a th:href="@{/repairs}">Отмена</a>
+        </div>
+    </form>
+</main>
+
+<footer>
+    <p>&copy; 2024 Repair Management System</p>
+</footer>
+</body>
+</html>

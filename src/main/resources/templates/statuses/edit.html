@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактировать статус</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<header>
+    <h1>Учет ремонта радиостанций</h1>
+    <nav>
+        <a th:href="@{/repairs}"> Ремонт</a> |
+        <a th:href="@{/radio-types}"> Типы радиостанций</a> |
+        <a th:href="@{/departments}"> Подразделения</a> |
+        <a th:href="@{/spare-parts}"> Запчасти</a> |
+        <a th:href="@{/workers}"> Работники</a> |
+        <a th:href="@{/statuses}"> Статусы</a>
+    </nav>
+</header>
+
+<main>
+    <h2>Редактировать статус</h2>
+
+    <form th:action="@{/statuses/{id}(id=${status.id})}" th:object="${status}" method="post">
+        <div>
+            <label for="rstatus">Статус:</label>
+            <input type="text" id="rstatus" th:field="*{rstatus}" required />
+        </div>
+
+        <div>
+            <label for="rstatcomment">Описание статуса:</label>
+            <input type="text" id="rstatcomment" th:field="*{rstatcomment}" required />
+        </div>
+
+        <div>
+            <button type="submit">Сохранить</button>
+            <a th:href="@{/statuses}">Отмена</a>
+        </div>
+    </form>
+</main>
+
+<footer>
+    <p>&copy; 2024 Repair Management System</p>
+</footer>
+</body>
+</html>

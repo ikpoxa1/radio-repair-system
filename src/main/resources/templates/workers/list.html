@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Список работников</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<header>
+    <h1>Учет ремонта радиостанций</h1>
+    <nav>
+        <a th:href="@{/repairs}">Ремонт</a> |
+        <a th:href="@{/radio-types}">Типы радиостанций</a> |
+        <a th:href="@{/departments}">Подразделения</a> |
+        <a th:href="@{/spare-parts}">Запчасти</a> |
+        <a th:href="@{/workers}">Работники</a> |
+        <a th:href="@{/statuses}">Статусы</a>
+    </nav>
+</header>
+
+<main>
+    <h2>Список работников</h2>
+
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Фамилия</th>
+            <th>Должность</th>
+            <th>Роль</th>
+            <th>Логин</th>
+            <th>Пароль</th>
+            <th>Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="worker : ${workers}">
+            <td th:text="${worker.id}"></td>
+            <td th:text="${worker.lastName}"></td>
+            <td th:text="${worker.position}"></td>
+            <td th:text="${worker.role}"></td>
+            <td th:text="${worker.login}"></td>
+            <td th:text="${worker.formattedPassword}"></td>
+            <td>
+                <a th:href="@{/workers/edit/{id}(id=${worker.id})}">Редактировать</a> |
+                <a th:href="@{/workers/delete/{id}(id=${worker.id})}">Удалить</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a th:href="@{/workers/new}">Добавить нового работника</a>
+</main>
+
+<footer>
+    <p>&copy; 2024 Repair Management System</p>
+</footer>
+</body>
+</html>
